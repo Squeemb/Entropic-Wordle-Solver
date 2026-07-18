@@ -3,7 +3,7 @@ import requests
 from datetime import date
 from entropyCalc import calculateEntropy, getFeedback
 
-def get_wordle_of_the_day():
+def getWordleOfTheDay():
     """
     Fetches today's Wordle answer from the NYT API.
     """
@@ -19,7 +19,7 @@ def get_wordle_of_the_day():
         print(f"Could not fetch today's word: {e}")
         return "CRANE" # If unable to fetch, return a default word
 
-def load_dictionary(filename):
+def loadDictionary(filename):
     """Stage 1: Load the wordlist from the data folder."""
     path = os.path.join("data", filename)
     with open(path, "r") as f:
@@ -40,7 +40,7 @@ def solveWordle(secretWord, allWords):
         
         # 1) Finding the best guess; this is initally slow
         if attempts == 1:
-            bestGuess = "TARES"  # Common high entropy starter
+            bestGuess = "SLATE"  # Common high entropy starter
         else:
             # Rank all possible words by entropy with a greedy approach
             bestGuess = max(possibleWords, key=lambda word: calculateEntropy(word, possibleWords))
@@ -48,7 +48,7 @@ def solveWordle(secretWord, allWords):
         # 2) Get feedback
         pattern = getFeedback(bestGuess, secretWord)
 
-        print(f"Attempt {attempts}: Guesssing '{bestGuess}' -> Pattern: {pattern}")
+        print(f"Attempts: {attempts} | Guessing: '{bestGuess}' | Pattern: {pattern} | Entropy: {calculateEntropy(bestGuess, possibleWords):.2f}")
 
         if bestGuess == secretWord:
             print(f"Solved in {attempts} turns.")
@@ -63,11 +63,12 @@ def solveWordle(secretWord, allWords):
 
         print(f"Remaining words: {len(possibleWords)}")
 
+
+
 if __name__ == "__main__":
-    words = load_dictionary("wordlist.txt")
+    words = loadDictionary("wordlist.txt")
     
-    # FETCH LIVE DATA
-    target = get_wordle_of_the_day()
-    print(f"Today's Real Wordle: {target}")
+    # Live data from NYT API
+    target = getWordleOfTheDay()
     
     solveWordle(target, words)

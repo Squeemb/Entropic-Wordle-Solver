@@ -10,7 +10,7 @@ def getFeedback(guess, secret):
 	secretList = list(secret)
 	guessList = list(guess)
 
-	# Find greens in the correct positionz
+	# Find greens in the correct position
 	for i in range(5):
 		if guessList[i] == secretList[i]:
 			result[i] = 2
